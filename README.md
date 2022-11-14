@@ -22,6 +22,10 @@ Switch to the repo folder
 
     cd Loan-App
     
+Install the dependencies
+
+    composer install
+
 Create env file
 
     cp .env.example .env
