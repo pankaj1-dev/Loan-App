@@ -22,6 +22,10 @@ Switch to the repo folder
 
     cd Loan-App
     
+Create a mysql database with name below
+
+    loan_app_db
+
 Install the dependencies
 
     composer install
