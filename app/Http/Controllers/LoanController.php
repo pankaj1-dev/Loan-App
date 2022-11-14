@@ -23,21 +23,29 @@ class LoanController extends Controller
         if ( $this->isCustomer($user) ) {
             $validator = Validator::make($request->all(), $this->loanValidationRules());
             if ($validator->passes()) {
-                $loan = new Loan();
-                $loan->customer_id = $user->id;
-                $loan->loan_amount = $request->input('loan_amount');
-                $loan->loan_term = $request->input('loan_term');
-                $loan->loan_date = date("Y-m-d H:i:s");
-                $loan->save();
+                if ( $request->input('loan_amount') > 0 ) {
+                    if ( $request->input('loan_term') > 0 ) {
+                        $loan = new Loan();
+                        $loan->customer_id = $user->id;
+                        $loan->loan_amount = $request->input('loan_amount');
+                        $loan->loan_term = $request->input('loan_term');
+                        $loan->loan_date = date("Y-m-d H:i:s");
+                        $loan->save();
 
-                return $this->onSuccess($loan, 'Loan Created');
+                        return $this->onSuccess($loan, 'Loan Created');
+
+                    } else {
+                        return $this->onError(400, 'Invalid Loan Term');
+                    }
+                } else {
+                    return $this->onError(400, 'Invalid Loan Amount');
+                }   
             }
         
             return $this->onError(400, $validator->errors());
         }
 
         return $this->onError(401, 'Unauthorized Access');
-
     }
 
     public function loans(Request $request): JsonResponse
